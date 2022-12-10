@@ -212,25 +212,51 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-md-8">
-            <form>
+            <div
+              class="alert alert-success alert-dismissible fade show d-none my-alert"
+              role="alert"
+            >
+              <strong>Yeyyyy!!!</strong> Harapan dan Doanya sudah terkirim beb
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
+            </div>
+            <form name="cean-birthday">
               <div class="mb-3">
                 <label for="nama" class="form-label"
                   >Isi Nama Lengkapnya Ayang, Untuk KK Kita</label
                 >
-                <input type="nama" class="form-control" id="nama" aria-describedby="nama" />
+                <input
+                  type="nama"
+                  class="form-control"
+                  id="nama"
+                  aria-describedby="nama"
+                  name="nama"
+                />
               </div>
               <div class="mb-3">
                 <label for="harapan" class="form-label">Harapan</label>
-                <textarea class="form-control" id="harapan" rows="3"></textarea>
+                <textarea class="form-control" id="harapan" rows="3" name="harapan"></textarea>
               </div>
               <div class="mb-3">
                 <label for="doa" class="form-label">Doa</label>
-                <textarea class="form-control" id="doa" rows="3"></textarea>
+                <textarea class="form-control" id="doa" rows="3" name="doa"></textarea>
               </div>
               <div id="amiin" class="form-text mb-3">
                 Semoga harapan dan doanya terkabulkan, Aamiinn....
               </div>
-              <button type="kirim" class="btn btn-primary">Kirim</button>
+              <button type="kirim" class="btn btn-primary btn-kirim">Kirim</button>
+              <button class="btn btn-primary btn-loading d-none" type="button" disabled>
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Loading...
+              </button>
             </form>
           </div>
         </div>
@@ -252,5 +278,31 @@
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"
     ></script>
+    <script>
+      const scriptURL =
+        "https://script.google.com/macros/s/AKfycbya4kudBkrIS5wJFX2pNnIYOGmHK39NCgB0Mu4uY3AZBJze9Gqjg5Lv4D2hszlvExox/exec";
+      const form = document.forms["cean-birthday"];
+      const btnKirim = document.querySelector(".btn-kirim");
+      const btnLoading = document.querySelector(".btn-loading");
+      const myAlert = document.querySelector(".my-alert");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        // ketika tombol kirim diklik
+        // tampilkan tombol loading, hilangkan tombol kirim
+        btnLoading.classList.toggle("d-none");
+        btnKirim.classList.toggle("d-none");
+
+        fetch(scriptURL, { method: "POST", body: new FormData(form) })
+          .then((response) => {
+            btnLoading.classList.toggle("d-none");
+            btnKirim.classList.toggle("d-none");
+            myAlert.classList.toggle("d-none");
+            form.reset();
+            console.log("Success!", response);
+          })
+          .catch((error) => console.error("Error!", error.message));
+      });
+    </script>
   </body>
 </html>
